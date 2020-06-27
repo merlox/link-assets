@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../assets/list.css">
-    <title>Tasend</title>
+    <title><%= title %></title>
 </head>
 <body>
     <h1><%= title %></h1>
@@ -12,7 +12,7 @@
         <% list.forEach(item => { %>
             <li class="list">
                 <div class="list-description"><%= item.description %></div>
-                <a href="<%= item.link %>"><%= item.link %></a>
+                <a href="<%= item.link %>" target="_BLANK"><%= item.link %></a>
             </li>
         <% }) %>
     </ul>

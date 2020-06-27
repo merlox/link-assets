@@ -47,7 +47,9 @@ function error(res, msg) {
 	})
 }
 
+app.set('view engine', 'ejs')
 app.use(bodyParser.json())
+app.use('/assets', express.static('assets'))
 app.use(cors())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(
@@ -77,10 +79,12 @@ app.use('*', (req, res, next) => {
 })
 
 app.post('/api/list', async (req, res) => {
-	const { list } = req.body
+	const { list, title } = req.body
 	let id
 	if (!list || list.length === 0)
-		return error(res, 'You need to send the contents to create a list')
+        return error(res, 'You need to send the contents to create a list')
+    if (!title || title.length === 0)
+		return error(res, 'You need to send a title to create a list')
 	// Check that all items have a link associated with them
 	for (let i = 0; i < list.length; i++) {
 		const item = list[i]
@@ -95,7 +99,10 @@ app.post('/api/list', async (req, res) => {
 	}
 	// Add the list to the database
 	try {
-		const result = await db.collection('lists').insertOne({ list: list })
+		const result = await db.collection('lists').insertOne({ 
+            list: list,
+            title: title,
+        })
 		id = result.insertedId
 	} catch (e) {
 		console.log('Error', e)
@@ -108,14 +115,16 @@ app.post('/api/list', async (req, res) => {
 	})
 })
 
-app.get('/i/:id', async (req, res) => {
-	const list = await db
+app.get('/i/:listid', async (req, res) => {
+    console.log('id', req.params.listid)
+	const foundList = await db
 		.collection('lists')
-		.findOne({ _id: ObjectId(req.params.id) })
-	if (!list) return error(res, 'List not found for that id')
-	return res.json({
-		ok: true,
-		list,
+		.findOne({ _id: ObjectId(req.params.listid) })
+    if (!foundList) return error(res, 'List not found for that id')
+    
+	return res.render('list', {
+        list: foundList.list,
+        title: foundList.title,
 	})
 })
 

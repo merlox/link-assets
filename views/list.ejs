@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/list.css">
+    <title>Tasend</title>
+</head>
+<body>
+    <h1><%= title %></h1>
+    <ul class="list-container">
+        <% list.forEach(item => { %>
+            <li class="list">
+                <div class="list-description"><%= item.description %></div>
+                <a href="<%= item.link %>"><%= item.link %></a>
+            </li>
+        <% }) %>
+    </ul>
+</body>
+</html>

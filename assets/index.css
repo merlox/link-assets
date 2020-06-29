@@ -1,0 +1,72 @@
+body {
+    margin: 0;
+    font-family: sans-serif;
+    background-color: whitesmoke;
+}
+
+input[type="text"], textarea {
+    border: 1px solid lightgrey;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.main {
+    padding: 10px; 
+    max-width: 700px;
+    margin: auto;
+}
+
+.list-container {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.list {
+    background-color: white;
+    padding: 20px;
+    padding-right: 30px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    position: relative;
+}
+
+.list .list-description {
+    margin-bottom: 10px;
+    word-break: break-word;
+}
+
+.list a {
+    word-break: break-word;
+}
+
+.title-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 20px 0;
+}
+
+.item-container .item div {
+    display: flex;
+    align-items: center;
+}
+
+.item-container .item div:first-child {
+    margin-bottom: 5px;
+}
+
+.item-container .item div textarea, .item-container .item div input {
+    width: 100%;
+}
+
+.item-container .item div label {
+    width: 200px;
+}
+
+.delete-button {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    cursor: pointer;
+    color: lightgrey;
+}

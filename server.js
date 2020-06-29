@@ -115,8 +115,11 @@ app.post('/api/list', async (req, res) => {
 	})
 })
 
+app.get('/app', (req, res) => {
+	res.render('app')
+})
+
 app.get('/i/:listid', async (req, res) => {
-    console.log('id', req.params.listid)
 	const foundList = await db
 		.collection('lists')
 		.findOne({ _id: ObjectId(req.params.listid) })
@@ -129,9 +132,7 @@ app.get('/i/:listid', async (req, res) => {
 })
 
 app.get('/', (req, res) => {
-	res.json({
-		ok: true,
-	})
+	res.render('index')
 })
 
 start()

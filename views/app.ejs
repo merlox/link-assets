@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="../assets/index.css" />
+		<title>Tasend app</title>
+	</head>
+	<body>
+		<%- include('nav') %>
+		<div class="main">
+			<form onsubmit="submitForm(event)">
+				<div class="notifications"></div>
+				<div class="title-container">
+					<label for="title-input">Title</label>
+					<input
+						type="text"
+						id="title-input"
+						placeholder="My unique list"
+						required
+					/>
+				</div>
+
+				<div class="item-container">
+                    <div class="item list" id="item-counter-0">
+                        <div>
+                            <label for="description-input">Description</label>
+                            <textarea
+                                type="text"
+                                id="description-input"
+                                class="description-input"
+                                placeholder="Follow me on twitter"
+                                required
+                            ></textarea>
+                        </div>
+                        <div>
+                            <label for="link-input">Link</label>
+                            <input
+                                type="text"
+                                id="link-input"
+                                class="link-input"
+                                placeholder="https://twitter.com/merunas2"
+                                pattern="https?://.*"
+                                required
+                            />
+                        </div>
+                        <span class="delete-button" onclick="deleteItem('#item-counter-0')">✖</span>
+                    </div>
+				</div>
+
+				<input type="submit" class="btn btn-primary ml-auto" value="Create" />
+				<button type="button" class="btn btn-secondary ml-auto" onclick="addItem()">
+					Add Item
+				</button>
+			</form>
+		</div>
+		<script>
+            let counter = 0
+			const addItem = () => {
+                counter++
+                document.querySelector('.item-container').insertAdjacentHTML('beforeend', `
+                    <div class="item list" id="item-counter-${counter}">
+                        <div>
+                            <label for="description-input counter-${counter}">Description</label>
+                            <textarea
+                                type="text"
+                                id="description-input counter-${counter}"
+                                class="description-input"
+                                placeholder="Follow me on twitter"
+                                required
+                            ></textarea>
+                        </div>
+                        <div>
+                            <label for="link-input counter-${counter}">Link</label>
+                            <input
+                                type="text"
+                                id="link-input counter-${counter}"
+                                class="link-input"
+                                placeholder="https://twitter.com/merunas2"
+                                pattern="https?://.*"
+                                required
+                            />
+                        </div>
+                        <span class="delete-button" onclick="deleteItem('#item-counter-${counter}')">✖</span>
+                    </div>
+                `)
+            }
+
+            const deleteItem = id => {
+                document.querySelector(id).remove()
+            }
+
+			const submitForm = async e => {
+                e.preventDefault()
+				const form = e.target
+				const title = form.querySelector('#title-input').value
+				const descriptions = [...form.querySelectorAll('.description-input')].map(item => item.value)
+				const links = [...form.querySelectorAll('.link-input')].map(item => item.value)
+				if (!title || title.length === 0) {
+					showNotification('tomato', "The title can't be empty")
+                }
+                const list = descriptions.map((description, i) => {
+                    return {
+                        description,
+                        link: links[i],
+                    }
+                })
+				try {
+					let req = await fetch('/api/list', {
+						method: 'post',
+						headers: {
+							'content-type': 'application/json',
+						},
+						body: JSON.stringify({
+							title,
+							list,
+						}),
+					})
+					const response = await req.json()
+					if (response.ok) {
+						const url = window.location.origin
+						showNotification(
+							'green',
+							`Created list successfully with link:<br/><a target="_BLANK" href="${url}/i/${response.id}">${url}/i/${response.id}</a>`
+						)
+					} else {
+						showNotification('tomato', response.msg)
+					}
+				} catch (e) {
+					showNotification(
+						'tomato',
+						`There was an error publishing your links ${e.message}`
+					)
+				}
+			}
+
+			const showNotification = (color, msg) => {
+				document.querySelector('.notifications').innerHTML = msg
+				document.querySelector('.notifications').style.color = color
+			}
+		</script>
+	</body>
+</html>

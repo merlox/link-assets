@@ -8,6 +8,11 @@ input[type="text"], textarea {
     border: 1px solid lightgrey;
     padding: 10px;
     border-radius: 5px;
+    -webkit-appearance: none;
+}
+
+button {
+    -webkit-appearance: none;
 }
 
 .main {

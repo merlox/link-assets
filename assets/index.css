@@ -33,6 +33,7 @@ button {
     margin-bottom: 10px;
     border-radius: 10px;
     position: relative;
+    text-align: center;
 }
 
 .list .list-description {
@@ -74,4 +75,14 @@ button {
     right: 10px;
     cursor: pointer;
     color: lightgrey;
+}
+
+.footer {
+    color: darkgrey;
+    text-align: center;
+
+}
+
+.footer-link {
+    color: grey;
 }
